@@ -1,0 +1,13 @@
+{
+	"extends": "astro/tsconfigs/strict",
+	"compilerOptions": {
+		"lib": ["ESNext", "DOM"],
+		"noUncheckedIndexedAccess": true,
+		"noFallthroughCasesInSwitch": true,
+		"noImplicitOverride": true,
+		"noImplicitReturns": true,
+		"allowUnreachableCode": false
+	},
+	"include": [".astro/types.d.ts", "**/*"],
+	"exclude": ["dist"]
+}

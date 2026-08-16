@@ -1,0 +1,34 @@
+{
+	"name": "schrodinger-likes-cats",
+	"type": "module",
+	"version": "0.0.1",
+	"private": true,
+	"description": "Playground site: exhibits in a white space. Face is Schrödinger who likes cats.",
+	"license": "MIT",
+	"engines": {
+		"node": ">=24.15.0"
+	},
+	"packageManager": "npm@12.0.2",
+	"scripts": {
+		"dev": "npm run check && astro dev",
+		"build": "npm run check && astro build",
+		"preview": "astro preview",
+		"check": "astro check && svelte-check --tsconfig ./tsconfig.json && biome check .",
+		"format": "biome check --write ."
+	},
+	"dependencies": {
+		"@astrojs/mdx": "^7.0.5",
+		"@astrojs/svelte": "^9.0.1",
+		"astro": "^7.2.2",
+		"svelte": "^5.56.9"
+	},
+	"devDependencies": {
+		"@astrojs/check": "^0.9.10",
+		"@biomejs/biome": "^2.5.8",
+		"svelte-check": "^4.7.6",
+		"typescript": "^6.0.3"
+	},
+	"allowScripts": {
+		"esbuild@0.28.2": true
+	}
+}

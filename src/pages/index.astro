@@ -1,0 +1,18 @@
+---
+import Hello from "../smoke/Hello.svelte";
+
+const base = import.meta.env.BASE_URL;
+---
+
+<html lang="ja">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Schrödinger Likes Cats</title>
+	</head>
+	<body>
+		<p>toolchain is up. <a href={base}>top</a></p>
+		<p>Biome / TypeScript 6 / Svelte 5</p>
+		<Hello client:load label="押す" />
+	</body>
+</html>
