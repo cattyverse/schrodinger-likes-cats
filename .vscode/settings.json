@@ -1,5 +1,7 @@
 {
 	"explorer.excludeGitIgnore": false,
+	"search.useIgnoreFiles": false,
+	"files.useIgnoreFiles": false,
 	"prettier.enable": false,
 	"eslint.enable": false,
 	"biome.requireConfiguration": true,
