@@ -1,10 +1,5 @@
 {
 	"explorer.excludeGitIgnore": false,
-	"files.exclude": {
-		"**/node_modules": true,
-		"**/dist": true,
-		"**/.astro": true
-	},
 	"prettier.enable": false,
 	"eslint.enable": false,
 	"biome.requireConfiguration": true,
