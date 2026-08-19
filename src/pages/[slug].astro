@@ -1,0 +1,27 @@
+---
+import type { AstroComponentFactory } from "astro/runtime/server/index.js";
+
+export function getStaticPaths() {
+	const pages = import.meta.glob<{ default: AstroComponentFactory }>(
+		"../contents/*/detail.astro",
+		{ eager: true },
+	);
+
+	return Object.entries(pages).map(([path, page]) => {
+		const parts = path.split("/");
+		return {
+			params: { slug: parts[parts.length - 2] ?? "" },
+			props: { Detail: page.default },
+		};
+	});
+}
+
+interface Props {
+	Detail: AstroComponentFactory;
+}
+
+const { slug } = Astro.params;
+const { Detail } = Astro.props;
+---
+
+<Detail slug={slug ?? ""} />

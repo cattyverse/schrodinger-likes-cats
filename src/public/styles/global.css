@@ -98,10 +98,19 @@ textarea {
 }
 
 .site-footer a {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4em;
 	color: var(--muted);
 	font-size: 0.875rem;
 	letter-spacing: 0.04em;
 	text-decoration: none;
+}
+
+.site-footer img {
+	display: block;
+	width: auto;
+	height: 1em;
 }
 
 .site-footer a:hover,

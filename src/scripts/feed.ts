@@ -5,7 +5,6 @@ import type { ContentsItem } from "./catalog";
 export type FeedItem = ContentsItem;
 
 type FeedInput = {
-	base: string;
 	items: FeedItem[];
 	stack: HTMLElement;
 	status: HTMLElement;
@@ -16,20 +15,18 @@ type FeedInput = {
 const PAGE = 12;
 const EXTRA_LIMIT = 20;
 const WAIT_MS = 500;
-const LEAD = "schrodinger-cat";
+const LEAD = "schrodingers-cat";
 
 export function startFeed(input: FeedInput): void {
 	new Feed(input).start();
 }
 
 class Feed {
-	base: string;
 	stack: HTMLElement;
 	status: HTMLElement;
 	sentinel: HTMLElement;
 	footer: HTMLElement;
 	items: FeedItem[];
-	plays = new Map<string, Promise<string>>();
 	observer: IntersectionObserver | undefined;
 	i = 0;
 	extras = 0;
@@ -37,7 +34,6 @@ class Feed {
 	closed = false;
 
 	constructor(input: FeedInput) {
-		this.base = input.base;
 		this.stack = input.stack;
 		this.status = input.status;
 		this.sentinel = input.sentinel;
@@ -47,7 +43,7 @@ class Feed {
 
 	start(): void {
 		this.stack.addEventListener("click", (event) => {
-			void this.open(event);
+			this.open(event);
 		});
 		void this.fill().then(() => {
 			if (!this.closed) {
@@ -170,17 +166,6 @@ class Feed {
 		return Math.ceil(leftover / row);
 	}
 
-	playHtml(slug: string): Promise<string> {
-		let pending = this.plays.get(slug);
-		if (!pending) {
-			pending = fetch(`${this.base}/partial/${slug}/play/`).then((response) =>
-				response.text(),
-			);
-			this.plays.set(slug, pending);
-		}
-		return pending;
-	}
-
 	end(): void {
 		this.closed = true;
 		this.observer?.disconnect();
@@ -188,7 +173,7 @@ class Feed {
 		this.footer.hidden = false;
 	}
 
-	async open(event: Event): Promise<void> {
+	open(event: Event): void {
 		const button = (event.target as HTMLElement).closest<HTMLButtonElement>(
 			"[data-more]",
 		);
@@ -197,18 +182,10 @@ class Feed {
 		}
 		const card = button.closest<HTMLElement>("[data-card]");
 		const extra = card?.querySelector<HTMLElement>("[data-extra]");
-		const slot = card?.querySelector<HTMLElement>("[data-play-slot]");
-		if (!card || !extra || !slot) {
+		if (!card || !extra) {
 			return;
 		}
 		const next = button.getAttribute("aria-expanded") !== "true";
-		if (next && !slot.dataset.ready) {
-			const slug = card.dataset.slug;
-			if (slug) {
-				slot.innerHTML = await this.playHtml(slug);
-				slot.dataset.ready = "1";
-			}
-		}
 		button.setAttribute("aria-expanded", String(next));
 		card.classList.toggle("is-open", next);
 		extra.inert = !next;

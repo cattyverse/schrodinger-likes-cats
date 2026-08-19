@@ -1,0 +1,18 @@
+---
+import { imageUrl } from "../scripts/url";
+import ui from "../site/ja/ui.json";
+
+interface Props {
+	deferred?: boolean;
+}
+
+const { deferred = false } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+---
+
+<footer class="site-footer" data-footer hidden={deferred}>
+	<a href={`${base}/`}>
+		<img src={imageUrl("site", "logo.svg")} alt="" width="95" height="58">
+		{ui.name}
+	</a>
+</footer>

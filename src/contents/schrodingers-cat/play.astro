@@ -1,0 +1,62 @@
+---
+import { imageUrl } from "../../scripts/url";
+import "./play.css";
+
+interface Props {
+	slug: string;
+}
+
+const { slug } = Astro.props;
+
+const person = imageUrl(slug, "play/person.svg");
+const personLifting = imageUrl(slug, "play/person-lifting.svg");
+const personGlad = imageUrl(slug, "play/person-glad.svg");
+const cat = imageUrl(slug, "play/cat.svg");
+const box = imageUrl(slug, "play/box.svg");
+---
+
+<div class="play" data-play>
+	<div class="play-stage">
+		<div class="play-person">
+			<svg
+				class="play-person-idle"
+				viewBox="0 0 120 200"
+				width="120"
+				height="200"
+				aria-hidden="true"
+			>
+				<image href={person} width="120" height="200"></image>
+			</svg>
+			<svg
+				class="play-person-lifting"
+				viewBox="0 0 120 200"
+				width="120"
+				height="200"
+				aria-hidden="true"
+			>
+				<image href={personLifting} width="120" height="200"></image>
+			</svg>
+			<svg
+				class="play-person-glad"
+				viewBox="0 0 120 200"
+				width="120"
+				height="200"
+				aria-hidden="true"
+			>
+				<image href={personGlad} width="120" height="200"></image>
+			</svg>
+		</div>
+		<div class="play-well">
+			<div class="play-cat" data-cat>
+				<svg viewBox="0 0 80 90" width="80" height="90" aria-hidden="true">
+					<image href={cat} width="80" height="90"></image>
+				</svg>
+			</div>
+			<div class="play-box" data-box>
+				<svg viewBox="0 0 140 118" width="140" height="118" aria-hidden="true">
+					<image href={box} width="140" height="118"></image>
+				</svg>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,40 @@
+---
+import PlayTemplate from "../components/playTemplate.svelte";
+import SiteFooter from "../components/siteFooter.astro";
+import SiteHeader from "../components/siteHeader.astro";
+import Play from "../contents/schrodingers-cat/play.astro";
+import { imageUrl, styleUrl } from "../scripts/url";
+import ui from "../site/ja/ui.json";
+
+const slug = "schrodingers-cat";
+---
+
+<html lang="ja">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>{ui.name}</title>
+		<link rel="icon" href={imageUrl("site", "logo.svg")} type="image/svg+xml">
+		<link rel="stylesheet" href={styleUrl("global.css")}>
+		<link rel="stylesheet" href={styleUrl("card.css")}>
+	</head>
+	<body>
+		<SiteHeader />
+		<main class="detail">
+			<div class="card-play" data-play-root={slug}>
+				<Play slug={slug} />
+				<PlayTemplate slug={slug} embedded={true} client:load />
+			</div>
+		</main>
+		<SiteFooter />
+	</body>
+</html>
+
+<style>
+.detail {
+	width: 100%;
+	max-width: var(--card-max);
+	margin-inline: auto;
+	padding: 2rem 1rem 0;
+}
+</style>

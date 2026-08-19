@@ -1,0 +1,23 @@
+---
+import DetailTemplate from "../../components/detailTemplate.astro";
+import { Content } from "./ja/detail.mdx";
+import introduction from "./ja/introduction.json";
+import meta from "./meta.json";
+import relatedFile from "./related.json";
+
+interface Props {
+	slug: string;
+}
+
+const { slug } = Astro.props;
+---
+
+<DetailTemplate
+	slug={slug}
+	title={introduction.title}
+	description={introduction.description}
+	image={meta.image}
+	related={relatedFile.related}
+>
+	<Content />
+</DetailTemplate>

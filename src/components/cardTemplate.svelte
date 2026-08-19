@@ -2,6 +2,7 @@
 import ui from "../site/ja/ui.json";
 import tagJa from "../tags/ja/tag.json";
 import FramesTemplate from "./framesTemplate.svelte";
+import PlayTemplate from "./playTemplate.svelte";
 
 type Props = {
 	slug: string;
@@ -44,7 +45,7 @@ const label = (id: string) => words[id]?.label ?? id;
 		aria-hidden="true"
 	>
 		<div class="card-extra-inner">
-			<div class="card-play" data-play-slot></div>
+			<PlayTemplate {slug} />
 			<div class="card-detail">
 				<p class="card-detail-label">{ui.commentary}</p>
 				<p class="card-detail-name">

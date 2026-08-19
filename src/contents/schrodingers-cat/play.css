@@ -1,0 +1,147 @@
+.play {
+	container-type: inline-size;
+	position: relative;
+	overflow: hidden;
+	aspect-ratio: 4 / 3;
+	background: var(--canvas);
+	user-select: none;
+	-webkit-user-select: none;
+}
+
+.play-stage {
+	position: absolute;
+	inset: 0;
+}
+
+.play-stage::after {
+	content: "";
+	position: absolute;
+	right: 7%;
+	bottom: 11%;
+	left: 7%;
+	height: 2px;
+	background: var(--ink);
+	pointer-events: none;
+}
+
+.play-person {
+	position: absolute;
+	bottom: 11%;
+	left: 8%;
+	z-index: 1;
+	display: grid;
+	width: 28%;
+	transform-origin: 50% 100%;
+}
+
+.play-person svg {
+	grid-area: 1 / 1;
+	display: block;
+	width: 100%;
+	height: auto;
+}
+
+.play svg {
+	pointer-events: none;
+	user-select: none;
+}
+
+.play-person-lifting,
+.play-person-glad {
+	opacity: 0;
+}
+
+.play.is-lifting .play-person-idle {
+	opacity: 0;
+}
+
+.play.is-lifting .play-person-lifting {
+	opacity: 1;
+}
+
+.play.is-revealed .play-person-idle,
+.play.is-revealed .play-person-lifting {
+	opacity: 0;
+}
+
+.play.is-revealed .play-person-glad {
+	opacity: 1;
+}
+
+.play-well {
+	position: absolute;
+	right: 10%;
+	bottom: 11%;
+	z-index: 2;
+	width: 42%;
+	height: 64%;
+}
+
+.play-cat {
+	position: absolute;
+	bottom: 6%;
+	left: 50%;
+	z-index: 0;
+	width: 46%;
+	translate: -50% 0;
+	transform-origin: 50% 80%;
+	pointer-events: none;
+}
+
+.play.is-revealed .play-cat {
+	animation: play-dance 0.45s steps(2, end) infinite;
+}
+
+.play-cat svg,
+.play-box svg {
+	display: block;
+	width: 100%;
+	height: auto;
+	overflow: visible;
+}
+
+.play-box {
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	z-index: 2;
+	cursor: grab;
+	touch-action: none;
+	transform: translateY(0);
+	transition: transform 0.4s ease-in;
+}
+
+.play.is-dragging .play-box {
+	cursor: grabbing;
+	transition: none;
+}
+
+.play.is-lifting .play-person {
+	animation: play-nervous 0.28s ease-in-out infinite;
+}
+
+.play.is-revealed .play-person {
+	animation: none;
+}
+
+@keyframes play-nervous {
+	50% {
+		transform: translateY(2%) scaleX(1.04);
+	}
+}
+
+@keyframes play-dance {
+	to {
+		transform: scaleX(-1);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.play-box,
+	.play.is-lifting .play-person,
+	.play.is-revealed .play-cat {
+		animation: none;
+		transition: none;
+	}
+}

@@ -1,11 +1,11 @@
 ---
+import SiteFooter from "../components/siteFooter.astro";
 import SiteHeader from "../components/siteHeader.astro";
 import { contentsCatalog } from "../scripts/catalog";
 import { imageUrl, styleUrl } from "../scripts/url";
 import ui from "../site/ja/ui.json";
 
 const catalog = contentsCatalog();
-const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 ---
 
 <html lang="ja">
@@ -24,9 +24,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 			<div class="feed-spinner" aria-hidden="true"></div>
 		</div>
 		<div class="feed-sentinel" data-sentinel></div>
-		<footer class="site-footer" data-footer hidden>
-			<a href={`${base}/`}>{ui.name}</a>
-		</footer>
+		<SiteFooter deferred />
 		<script
 			is:inline
 			id="catalog"
@@ -36,7 +34,6 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 		<script>
 		import { startFeed } from "../scripts/feed";
 
-		const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 		const stack = document.querySelector<HTMLElement>("[data-stack]");
 		const status = document.querySelector<HTMLElement>("[data-status]");
 		const sentinel = document.querySelector<HTMLElement>("[data-sentinel]");
@@ -45,7 +42,6 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 
 		if (stack && status && sentinel && footer && catalogText) {
 			startFeed({
-				base,
 				items: JSON.parse(catalogText),
 				stack,
 				status,
