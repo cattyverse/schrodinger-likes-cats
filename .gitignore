@@ -5,6 +5,10 @@ node_modules/
 dist/
 .astro/
 
+# 展示の絵。原本は R2。site（ロゴ、missing.svg）だけ追跡する
+src/public/images/*
+!src/public/images/site/
+
 # env
 .env
 .env.*
@@ -20,6 +24,3 @@ pnpm-debug.log*
 .DS_Store
 Thumbs.db
 Desktop.ini
-
-# docs
-docs/

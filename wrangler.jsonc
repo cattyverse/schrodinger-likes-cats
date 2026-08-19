@@ -1,0 +1,18 @@
+{
+	"name": "schrodinger-likes-cats",
+	"compatibility_date": "2026-08-18",
+	"assets": {
+		"directory": "./dist",
+		"not_found_handling": "404-page"
+	},
+	"routes": [
+		{
+			"pattern": "cattyverse.com/schrodinger-likes-cats",
+			"zone_name": "cattyverse.com"
+		},
+		{
+			"pattern": "cattyverse.com/schrodinger-likes-cats/*",
+			"zone_name": "cattyverse.com"
+		}
+	]
+}
