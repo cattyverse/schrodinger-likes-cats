@@ -4,6 +4,7 @@ import { styleUrl } from "../scripts/url";
 import CardTemplate from "../share/cardTemplate.astro";
 
 const catalog = contentsCatalog();
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 ---
 
 <html lang="ja">
@@ -16,6 +17,13 @@ const catalog = contentsCatalog();
 	<body>
 		<CardTemplate stylesOnly />
 		<main class="stack" data-stack></main>
+		<div class="feed-status" data-status hidden>
+			<div class="feed-spinner" aria-hidden="true"></div>
+		</div>
+		<div class="feed-sentinel" data-sentinel></div>
+		<footer class="site-footer" data-footer hidden>
+			<a href={`${base}/`}>Schrödinger Likes Cats</a>
+		</footer>
 		<script
 			is:inline
 			id="catalog"
@@ -23,37 +31,23 @@ const catalog = contentsCatalog();
 			set:html={JSON.stringify(catalog)}
 		></script>
 		<script>
+		import { startFeed } from "../scripts/feed";
+
 		const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 		const stack = document.querySelector<HTMLElement>("[data-stack]");
-		const embedded = document.getElementById("catalog")?.textContent;
+		const status = document.querySelector<HTMLElement>("[data-status]");
+		const sentinel = document.querySelector<HTMLElement>("[data-sentinel]");
+		const footer = document.querySelector<HTMLElement>("[data-footer]");
+		const catalogText = document.getElementById("catalog")?.textContent;
 
-		async function fill(target: HTMLElement, items: { slug: string }[]) {
-			for (const item of items) {
-				const response = await fetch(`${base}/partial/${item.slug}/card/`);
-				target.insertAdjacentHTML("beforeend", await response.text());
-			}
-		}
-
-		if (stack && embedded) {
-			void fill(stack, JSON.parse(embedded));
-			stack.addEventListener("click", (event) => {
-				const button = (event.target as HTMLElement).closest<HTMLButtonElement>(
-					"[data-more]",
-				);
-				if (!button) {
-					return;
-				}
-				const card = button.closest("[data-card]");
-				const extra = card?.querySelector<HTMLElement>("[data-extra]");
-				if (!card || !extra) {
-					return;
-				}
-				const open = button.getAttribute("aria-expanded") === "true";
-				const next = !open;
-				button.setAttribute("aria-expanded", String(next));
-				card.classList.toggle("is-open", next);
-				extra.inert = !next;
-				extra.setAttribute("aria-hidden", String(!next));
+		if (stack && status && sentinel && footer && catalogText) {
+			startFeed({
+				base,
+				items: JSON.parse(catalogText),
+				stack,
+				status,
+				sentinel,
+				footer,
 			});
 		}
 		</script>
