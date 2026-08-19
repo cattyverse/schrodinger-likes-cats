@@ -1,0 +1,18 @@
+<svg
+	xmlns="http://www.w3.org/2000/svg"
+	viewBox="0 0 95 58"
+	width="95"
+	height="58"
+	role="img"
+	aria-label="Schr&#246;dinger Likes Cats"
+>
+	<title>Schr&#246;dinger Likes Cats</title>
+	<path
+		d="M4,54 L4,10 L58,10 L58,44 C76,44 81,30 81,9 A5,5 0 0 1 91,9 C92,34 84,54 58,54"
+		fill="none"
+		stroke="#222"
+		stroke-width="4"
+		stroke-linecap="round"
+		stroke-linejoin="round"
+	/>
+</svg>

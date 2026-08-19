@@ -1,8 +1,8 @@
-export type FeedItem = {
-	slug: string;
-	published: string;
-	tags: string[];
-};
+import { mount } from "svelte";
+import CardTemplate from "../components/cardTemplate.svelte";
+import type { ContentsItem } from "./catalog";
+
+export type FeedItem = ContentsItem;
 
 type FeedInput = {
 	base: string;
@@ -29,7 +29,7 @@ class Feed {
 	sentinel: HTMLElement;
 	footer: HTMLElement;
 	items: FeedItem[];
-	cache = new Map<string, Promise<string>>();
+	plays = new Map<string, Promise<string>>();
 	observer: IntersectionObserver | undefined;
 	i = 0;
 	extras = 0;
@@ -46,7 +46,9 @@ class Feed {
 	}
 
 	start(): void {
-		this.stack.addEventListener("click", (event) => this.open(event));
+		this.stack.addEventListener("click", (event) => {
+			void this.open(event);
+		});
 		void this.fill().then(() => {
 			if (!this.closed) {
 				this.watch();
@@ -54,12 +56,18 @@ class Feed {
 		});
 	}
 
-	/** クエリなしは乱数＋先頭シュレ猫。`?tag=` はそのタグが付いた展示の新しい順。 */
+	/** クエリなしは乱数＋先頭シュレ猫。`?tag=` はそのタグ。`?order=published` は全件の新しい順。 */
 	order(items: FeedItem[]): FeedItem[] {
-		const tag = new URLSearchParams(location.search).get("tag");
+		const query = new URLSearchParams(location.search);
+		const tag = query.get("tag");
 		if (tag) {
 			return items
 				.filter((item) => item.tags.includes(tag))
+				.sort((a, b) => b.published.localeCompare(a.published));
+		}
+		if (query.get("order") === "published") {
+			return items
+				.slice()
 				.sort((a, b) => b.published.localeCompare(a.published));
 		}
 		const lead = items.filter((item) => item.slug === LEAD);
@@ -94,7 +102,7 @@ class Feed {
 		});
 	}
 
-	/** ローディングを出し、この回の HTML を全部取ってから一気に足す。 */
+	/** ローディングを出し、この回のカードを組み立ててから一気に足す。 */
 	async add(countAsExtra: boolean): Promise<void> {
 		if (this.busy || this.closed) {
 			return;
@@ -113,13 +121,22 @@ class Feed {
 		this.spin(true);
 		try {
 			const slice = this.items.slice(this.i, this.i + this.take());
-			const [htmls] = await Promise.all([
-				Promise.all(slice.map((item) => this.html(item.slug))),
-				new Promise<void>((resolve) => {
-					setTimeout(resolve, WAIT_MS);
-				}),
-			]);
-			this.stack.insertAdjacentHTML("beforeend", htmls.join(""));
+			await new Promise<void>((resolve) => {
+				setTimeout(resolve, WAIT_MS);
+			});
+			for (const item of slice) {
+				mount(CardTemplate, {
+					target: this.stack,
+					props: {
+						slug: item.slug,
+						title: item.title,
+						description: item.description,
+						tags: item.tags,
+						frames: item.frames,
+						interval: item.interval,
+					},
+				});
+			}
 			this.i += slice.length;
 		} finally {
 			this.busy = false;
@@ -153,13 +170,13 @@ class Feed {
 		return Math.ceil(leftover / row);
 	}
 
-	html(slug: string): Promise<string> {
-		let pending = this.cache.get(slug);
+	playHtml(slug: string): Promise<string> {
+		let pending = this.plays.get(slug);
 		if (!pending) {
-			pending = fetch(`${this.base}/partial/${slug}/card/`).then((response) =>
+			pending = fetch(`${this.base}/partial/${slug}/play/`).then((response) =>
 				response.text(),
 			);
-			this.cache.set(slug, pending);
+			this.plays.set(slug, pending);
 		}
 		return pending;
 	}
@@ -171,19 +188,27 @@ class Feed {
 		this.footer.hidden = false;
 	}
 
-	open(event: Event): void {
+	async open(event: Event): Promise<void> {
 		const button = (event.target as HTMLElement).closest<HTMLButtonElement>(
 			"[data-more]",
 		);
 		if (!button) {
 			return;
 		}
-		const card = button.closest("[data-card]");
+		const card = button.closest<HTMLElement>("[data-card]");
 		const extra = card?.querySelector<HTMLElement>("[data-extra]");
-		if (!card || !extra) {
+		const slot = card?.querySelector<HTMLElement>("[data-play-slot]");
+		if (!card || !extra || !slot) {
 			return;
 		}
 		const next = button.getAttribute("aria-expanded") !== "true";
+		if (next && !slot.dataset.ready) {
+			const slug = card.dataset.slug;
+			if (slug) {
+				slot.innerHTML = await this.playHtml(slug);
+				slot.dataset.ready = "1";
+			}
+		}
 		button.setAttribute("aria-expanded", String(next));
 		card.classList.toggle("is-open", next);
 		extra.inert = !next;

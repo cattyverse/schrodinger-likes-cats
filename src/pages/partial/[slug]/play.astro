@@ -1,0 +1,24 @@
+---
+import type { AstroComponentFactory } from "astro/runtime/server/index.js";
+
+export const partial = true;
+
+export function getStaticPaths() {
+	const plays = import.meta.glob<{ default: AstroComponentFactory }>(
+		"../../../contents/*/play.astro",
+		{ eager: true },
+	);
+
+	return Object.entries(plays).map(([path, play]) => {
+		const parts = path.split("/");
+		return {
+			params: { slug: parts[parts.length - 2] },
+			props: { Play: play.default },
+		};
+	});
+}
+
+const { Play } = Astro.props;
+---
+
+<Play />
