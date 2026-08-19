@@ -1,0 +1,70 @@
+---
+import { imageUrl } from "../scripts/url";
+
+interface Props {
+	slug: string;
+	frames: number;
+	interval: number;
+}
+
+const PUSH_MS = 300;
+
+const { slug, frames, interval } = Astro.props;
+const srcs = Array.from({ length: frames }, (_, i) =>
+	imageUrl(slug, `frames/frame${i + 1}.svg`),
+);
+
+const count = frames + 1;
+const cycle = count * (interval + PUSH_MS);
+
+function pct(ms: number): string {
+	return `${((ms / cycle) * 100).toFixed(4)}%`;
+}
+
+function keyframes(i: number): string {
+	const visibleStart = i * (interval + PUSH_MS);
+	const enterStart = visibleStart - PUSH_MS;
+	const exitStart = visibleStart + interval;
+	const name = `frames-${slug}-${i + 1}`;
+
+	if (i === 0) {
+		return `@keyframes ${name} {
+			0% { transform: translateY(0); }
+			${pct(exitStart)} { transform: translateY(0); animation-timing-function: ease-out; }
+			${pct(exitStart + PUSH_MS)} { transform: translateY(-100%); }
+			${pct(cycle - PUSH_MS)} { transform: translateY(-100%); }
+			${pct(cycle - PUSH_MS + 1)} { transform: translateY(100%); animation-timing-function: ease-out; }
+			100% { transform: translateY(0); }
+		}`;
+	}
+
+	return `@keyframes ${name} {
+		0% { transform: translateY(100%); }
+		${pct(enterStart)} { transform: translateY(100%); animation-timing-function: ease-out; }
+		${pct(visibleStart)} { transform: translateY(0); }
+		${pct(exitStart)} { transform: translateY(0); animation-timing-function: ease-out; }
+		${pct(exitStart + PUSH_MS)} { transform: translateY(-100%); }
+		100% { transform: translateY(-100%); }
+	}`;
+}
+
+const css = Array.from({ length: count }, (_, i) => {
+	const name = `frames-${slug}-${i + 1}`;
+	return `${keyframes(i)}
+.frames--${slug} > .frames-item:nth-child(${i + 1}) {
+	animation: ${name} ${cycle}ms infinite;
+}`;
+}).join("\n");
+---
+
+<Fragment set:html={`<style>${css}</style>`} />
+<div class={`frames frames--${slug}`}>
+	<div class="frames-item">
+		<slot />
+	</div>
+	{srcs.map((src) => (
+			<div class="frames-item">
+				<img src={src} width="480" height="360" alt="" loading="lazy" />
+			</div>
+		))}
+</div>

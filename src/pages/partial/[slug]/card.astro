@@ -1,0 +1,25 @@
+---
+import type { AstroComponentFactory } from "astro/runtime/server/index.js";
+
+export const partial = true;
+
+export function getStaticPaths() {
+	const cards = import.meta.glob<{ default: AstroComponentFactory }>(
+		["../../../contents/*/card.astro", "../../../lab/*/card.astro"],
+		{ eager: true },
+	);
+
+	return Object.entries(cards).map(([path, card]) => {
+		const parts = path.split("/");
+		return {
+			params: { slug: parts[parts.length - 2] },
+			props: { Card: card.default },
+		};
+	});
+}
+
+const { Card } = Astro.props;
+const { slug } = Astro.params;
+---
+
+<Card slug={slug} />

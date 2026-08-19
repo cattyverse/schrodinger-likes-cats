@@ -1,3 +1,14 @@
+:root {
+	/* FHD 1920 CSS px の 45%。窓がこれより狭ければ全幅、広ければ中央 */
+	--card-max: 864px;
+	--canvas: #ffffff;
+	--ink: #222;
+	--line: #d0d0d0;
+	--muted: #8f8f8f;
+	--tint: #f1efe8;
+	--tap: 2.75rem;
+}
+
 *,
 *::before,
 *::after {
@@ -6,6 +17,8 @@
 
 body {
 	margin: 0;
+	background: var(--canvas);
+	color: var(--ink);
 	font-family: system-ui, sans-serif;
 	line-height: 1.5;
 }
@@ -20,4 +33,16 @@ input,
 select,
 textarea {
 	font: inherit;
+}
+
+/* 一覧。列は常に 1 */
+.stack {
+	width: 100%;
+	max-width: var(--card-max);
+	margin-inline: auto;
+	padding-inline: 1rem;
+}
+
+.stack > * + * {
+	margin-block-start: 3.5rem;
 }

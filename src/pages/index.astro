@@ -1,8 +1,9 @@
 ---
+import { contentsCatalog } from "../scripts/catalog";
 import { styleUrl } from "../scripts/url";
-import Hello from "../smoke/Hello.svelte";
+import CardTemplate from "../share/cardTemplate.astro";
 
-const base = import.meta.env.BASE_URL;
+const catalog = contentsCatalog();
 ---
 
 <html lang="ja">
@@ -13,8 +14,48 @@ const base = import.meta.env.BASE_URL;
 		<link rel="stylesheet" href={styleUrl("global.css")}>
 	</head>
 	<body>
-		<p>toolchain is up. <a href={base}>top</a></p>
-		<p>Biome / TypeScript 6 / Svelte 5</p>
-		<Hello client:load label="押す" />
+		<CardTemplate stylesOnly />
+		<main class="stack" data-stack></main>
+		<script
+			is:inline
+			id="catalog"
+			type="application/json"
+			set:html={JSON.stringify(catalog)}
+		></script>
+		<script>
+		const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+		const stack = document.querySelector<HTMLElement>("[data-stack]");
+		const embedded = document.getElementById("catalog")?.textContent;
+
+		async function fill(target: HTMLElement, items: { slug: string }[]) {
+			for (const item of items) {
+				const response = await fetch(`${base}/partial/${item.slug}/card/`);
+				target.insertAdjacentHTML("beforeend", await response.text());
+			}
+		}
+
+		if (stack && embedded) {
+			void fill(stack, JSON.parse(embedded));
+			stack.addEventListener("click", (event) => {
+				const button = (event.target as HTMLElement).closest<HTMLButtonElement>(
+					"[data-more]",
+				);
+				if (!button) {
+					return;
+				}
+				const card = button.closest("[data-card]");
+				const extra = card?.querySelector<HTMLElement>("[data-extra]");
+				if (!card || !extra) {
+					return;
+				}
+				const open = button.getAttribute("aria-expanded") === "true";
+				const next = !open;
+				button.setAttribute("aria-expanded", String(next));
+				card.classList.toggle("is-open", next);
+				extra.inert = !next;
+				extra.setAttribute("aria-hidden", String(!next));
+			});
+		}
+		</script>
 	</body>
 </html>

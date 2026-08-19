@@ -1,0 +1,40 @@
+---
+import CardTemplate from "../../share/cardTemplate.astro";
+import FramesTemplate from "../../share/framesTemplate.astro";
+import introduction from "./ja/introduction.json";
+import meta from "./meta.json";
+
+interface Props {
+	slug: string;
+}
+
+const { slug } = Astro.props;
+---
+
+<CardTemplate
+	slug={slug}
+	title={introduction.title}
+	description={introduction.description}
+	tags={meta.tags}
+>
+	<FramesTemplate slug={slug} frames={meta.frames} interval={meta.interval}>
+		<h2 class="exhibit-title">{introduction.title}</h2>
+	</FramesTemplate>
+	<div class="play" slot="play" data-play></div>
+</CardTemplate>
+
+<style is:inline>
+.frames--schrodinger-cat .exhibit-title {
+	position: absolute;
+	inset: 0;
+	display: grid;
+	place-items: center;
+	margin: 0;
+	padding: 0.8em;
+	font-size: 1.35em;
+	font-weight: 650;
+	letter-spacing: 0.08em;
+	line-height: 1.4;
+	text-align: center;
+}
+</style>

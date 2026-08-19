@@ -1,0 +1,48 @@
+<svg
+	xmlns="http://www.w3.org/2000/svg"
+	viewBox="0 0 480 360"
+	width="480"
+	height="360"
+	role="img"
+	aria-label="missing"
+>
+	<title>missing</title>
+	<rect width="480" height="360" fill="#fdfcf9" />
+	<rect
+		x="24"
+		y="24"
+		width="432"
+		height="312"
+		rx="10"
+		fill="none"
+		stroke="#d0d0d0"
+		stroke-width="2"
+		stroke-dasharray="10 10"
+	/>
+	<g
+		fill="#fdfcf9"
+		stroke="#c2c2c2"
+		stroke-width="2.4"
+		stroke-linecap="round"
+		stroke-linejoin="round"
+	>
+		<path d="M186,168 L280,168 L280,246 L186,246 Z" />
+		<path d="M186,168 L210,146 L304,146 L280,168" />
+		<path d="M280,168 L304,146 L304,224 L280,246" />
+	</g>
+	<g fill="none" stroke="#c2c2c2" stroke-width="2.4" stroke-linecap="round">
+		<path d="M186,182 L280,182" />
+		<path d="M280,182 L304,160" />
+	</g>
+	<text
+		x="240"
+		y="222"
+		text-anchor="middle"
+		font-family="system-ui, sans-serif"
+		font-size="44"
+		font-weight="600"
+		fill="#c2c2c2"
+	>
+		?
+	</text>
+</svg>

@@ -1,0 +1,12 @@
+---
+import TagTemplate from "../share/tagTemplate.astro";
+
+interface Props {
+	mode: "chip";
+	id: string;
+}
+
+const { mode, id } = Astro.props;
+---
+
+<TagTemplate mode={mode} id={id} />
