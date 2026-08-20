@@ -1,6 +1,5 @@
 [
-	{ "path": "/?order=published", "label": "更新順" },
-	{ "path": "/tags/", "label": "タグ一覧" },
 	{ "path": "/lab/", "label": "実験場" },
-	{ "path": "/about/", "label": "about" }
+	{ "path": "/about/", "label": "about" },
+	{ "path": "/?order=published", "label": "新着" }
 ]

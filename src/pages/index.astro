@@ -19,6 +19,7 @@ const catalog = contentsCatalog();
 	</head>
 	<body>
 		<SiteHeader />
+		<div data-shelf></div>
 		<main class="stack" data-stack></main>
 		<div class="feed-status" data-status hidden>
 			<div class="feed-spinner" aria-hidden="true"></div>
@@ -38,15 +39,17 @@ const catalog = contentsCatalog();
 		const status = document.querySelector<HTMLElement>("[data-status]");
 		const sentinel = document.querySelector<HTMLElement>("[data-sentinel]");
 		const footer = document.querySelector<HTMLElement>("[data-footer]");
+		const shelf = document.querySelector<HTMLElement>("[data-shelf]");
 		const catalogText = document.getElementById("catalog")?.textContent;
 
-		if (stack && status && sentinel && footer && catalogText) {
+		if (stack && status && sentinel && footer && shelf && catalogText) {
 			startFeed({
 				items: JSON.parse(catalogText),
 				stack,
 				status,
 				sentinel,
 				footer,
+				shelf,
 			});
 		}
 		</script>

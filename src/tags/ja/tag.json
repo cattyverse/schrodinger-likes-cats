@@ -1,8 +1,0 @@
-{
-	"science": { "label": "科学", "description": "自然科学よりの展示。" },
-	"quantum": { "label": "量子力学", "description": "重ね合わせや観測の話。" },
-	"thought-experiment": {
-		"label": "思考実験",
-		"description": "頭の中だけで組み立てる実験。"
-	}
-}

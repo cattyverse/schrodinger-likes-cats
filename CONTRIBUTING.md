@@ -2,7 +2,7 @@
 
 遊び場の個人サイト。白い空間に展示がある。Web はその窓で、いまはスマホの縦スクロールとして覗く。ブログではない。顔は猫好きなシュレディンガー。本体は、あとから追加していく論理クイズ等。
 
-アクセスは、トップ（カード一覧）、詳細 `/{slug}`、索引 `/tags`、実験場 `/lab`、CATCについて `/about。`サイト内検索も、トップの「最新」「人気」も持たない。静的生成。サーバー処理は持たない。公開は Cloudflare Workers の静的アセットで、ドメインは `cattyverse.com`、基底は `/schrodinger-likes-cats/`。
+アクセスは、トップ（カード一覧）、詳細 `/{slug}`、実験場 `/lab`、CATCについて `/about`。カタログは `/?catalog=`。サイト内検索も、トップの「最新」「人気」も持たない。静的生成。サーバー処理は持たない。公開は Cloudflare Workers の静的アセットで、ドメインは `cattyverse.com`、基底は `/schrodinger-likes-cats/`。
 
 起動は [README](README.md)。
 

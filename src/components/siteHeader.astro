@@ -1,4 +1,5 @@
 ---
+import { catalogLabelOf, catalogs } from "../scripts/tags";
 import { imageUrl } from "../scripts/url";
 import nav from "../site/ja/nav.json";
 import ui from "../site/ja/ui.json";
@@ -8,6 +9,14 @@ const home = `${base}/`;
 const here = Astro.url.pathname.replace(/\/$/, "");
 const onHome = here === base || here === "";
 const homeDefault = onHome && Astro.url.searchParams.size === 0;
+
+const rooms = [
+	...nav,
+	...catalogs.map((id) => ({
+		path: `/?catalog=${id}`,
+		label: `#${catalogLabelOf(id)}`,
+	})),
+];
 
 const iso = new Intl.DateTimeFormat("en-CA", {
 	timeZone: "Asia/Tokyo",
@@ -54,7 +63,7 @@ function itemCurrent(path: string): boolean {
 		<time datetime={iso}>{built}</time>
 	</p>
 	<nav class="site-nav" aria-label="サイト">
-		{nav.map((item) => {
+		{rooms.map((item) => {
 				const href = `${base}${item.path}`;
 				return (
 					<a href={href} aria-current={itemCurrent(item.path) ? "page" : undefined}>

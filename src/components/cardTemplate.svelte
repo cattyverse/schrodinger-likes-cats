@@ -1,6 +1,6 @@
 <script lang="ts">
+import { labelOf, shelfQuery, tagHref } from "../scripts/tags";
 import ui from "../site/ja/ui.json";
-import tagJa from "../tags/ja/tag.json";
 import FramesTemplate from "./framesTemplate.svelte";
 import PlayTemplate from "./playTemplate.svelte";
 
@@ -15,10 +15,9 @@ type Props = {
 
 let { slug, title, description, tags, frames, interval }: Props = $props();
 
-const words = tagJa as Record<string, { label: string }>;
 const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 const extraId = $derived(`extra-${slug}`);
-const label = (id: string) => words[id]?.label ?? id;
+const currentTag = shelfQuery(location.search).tag;
 </script>
 
 <article class="card" data-card data-slug={slug}>
@@ -31,8 +30,11 @@ const label = (id: string) => words[id]?.label ?? id;
 	<ul class="card-tags">
 		{#each tags as id (id)}
 			<li>
-				<a class="tag-chip" href="{base}/?tag={encodeURIComponent(id)}"
-					>#{label(id)}</a
+				<a
+					class="tag-chip"
+					href={tagHref(base, id)}
+					aria-current={id === currentTag ? "true" : undefined}
+					>#{labelOf(id)}</a
 				>
 			</li>
 		{/each}

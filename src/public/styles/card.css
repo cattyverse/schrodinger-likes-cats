@@ -57,24 +57,6 @@
 	list-style: none;
 }
 
-.tag-chip {
-	display: inline-flex;
-	align-items: center;
-	padding: 0 10px;
-	border-radius: 2em;
-	background: var(--tint);
-	color: inherit;
-	font-size: 12px;
-	font-weight: 500;
-	line-height: 22px;
-	text-decoration: none;
-}
-
-.tag-chip:hover,
-.tag-chip:focus-visible {
-	background: #e6e3da;
-}
-
 .card-play {
 	margin-block: 1em 0.75em;
 }

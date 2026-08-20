@@ -1,0 +1,37 @@
+{
+	"quiz": {
+		"label": "クイズ",
+		"description": "答えを出す展示。",
+		"tags": {
+			"logic-quiz": { "label": "論理クイズ" },
+			"math-quiz": { "label": "数学クイズ" },
+			"easy": { "label": "易しい" },
+			"medium": { "label": "ふつう" },
+			"hard": { "label": "難しい" }
+		}
+	},
+	"math": {
+		"label": "数学",
+		"description": "数の話。",
+		"tags": {
+			"triangular-numbers": { "label": "三角数" },
+			"ratio": { "label": "比" },
+			"primes": { "label": "素数" }
+		}
+	},
+	"science": {
+		"label": "科学",
+		"description": "物理や化学、生き物の話。",
+		"tags": {
+			"reading": { "label": "読み物", "description": "答えを出さない展示。" },
+			"thought-experiment": {
+				"label": "思考実験",
+				"description": "頭の中だけで組み立てる実験。"
+			},
+			"quantum": {
+				"label": "量子力学",
+				"description": "重ね合わせや観測の話。"
+			}
+		}
+	}
+}
