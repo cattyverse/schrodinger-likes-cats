@@ -187,3 +187,31 @@
 .card-more[aria-expanded="true"] .card-mark {
 	transform: rotate(180deg);
 }
+
+.lab-title {
+	margin: 0;
+	font-size: 1.35em;
+	font-weight: 650;
+	letter-spacing: 0.08em;
+	line-height: 1.4;
+}
+
+.lab-body {
+	line-height: 1.75;
+}
+
+.lab-body > :first-child {
+	margin-block-start: 0;
+}
+
+.lab-sketch svg {
+	display: block;
+	width: 100%;
+	height: auto;
+}
+
+.lab-caption {
+	margin: 0.35em 0 1em;
+	color: var(--muted);
+	font-size: 0.875em;
+}

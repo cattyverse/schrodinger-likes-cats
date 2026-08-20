@@ -5,14 +5,12 @@ export type ContentsItem = {
 	title: string;
 	description: string;
 	frames?: number;
-	interval?: number;
 };
 
 type Meta = {
 	tags?: string[];
 	image?: string;
 	frames?: number;
-	interval?: number;
 };
 
 type Introduction = {
@@ -31,8 +29,13 @@ const contentsIntroduction = import.meta.glob<Introduction>(
 	{ eager: true, import: "default" },
 );
 
-function slugOf(path: string, room: string): string {
-	const parts = path.split("/");
+const labIntroduction = import.meta.glob<Introduction>(
+	"../lab/*/ja/introduction.json",
+	{ eager: true, import: "default" },
+);
+
+export function slugOf(path: string, room: string): string {
+	const parts = path.replaceAll("\\", "/").split("/");
 	return parts[parts.indexOf(room) + 1] ?? "";
 }
 
@@ -57,7 +60,21 @@ export function contentsCatalog(): ContentsItem[] {
 				description: introduction.description,
 				tags: meta.tags ?? [],
 				frames: meta.frames,
-				interval: meta.interval,
+			};
+		})
+		.sort((a, b) => b.published.localeCompare(a.published));
+}
+
+export function labCatalog(): ContentsItem[] {
+	return Object.entries(labIntroduction)
+		.map(([path, introduction]) => {
+			const slug = slugOf(path, "lab");
+			return {
+				slug,
+				published: introduction.published,
+				title: introduction.title,
+				description: introduction.description,
+				tags: [],
 			};
 		})
 		.sort((a, b) => b.published.localeCompare(a.published));

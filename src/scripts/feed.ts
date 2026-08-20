@@ -156,25 +156,28 @@ class Feed {
 			".site-nav a",
 		)) {
 			const url = new URL(link.href);
-			let on = false;
 			if (url.searchParams.has("catalog")) {
-				on = catalog === url.searchParams.get("catalog");
+				this.mark(link, catalog === url.searchParams.get("catalog"));
 			} else if (url.searchParams.has("order")) {
-				on = order === url.searchParams.get("order") && !catalog;
-			}
-			if (on) {
-				link.setAttribute("aria-current", "page");
-			} else {
-				link.removeAttribute("aria-current");
+				this.mark(link, order === url.searchParams.get("order") && !catalog);
 			}
 		}
-		const brand = document.querySelector(".site-brand");
-		if (brand) {
-			if (now.searchParams.size === 0) {
-				brand.setAttribute("aria-current", "page");
-			} else {
-				brand.removeAttribute("aria-current");
-			}
+		const brand = document.querySelector<HTMLAnchorElement>(".site-brand");
+		if (!brand) {
+			return;
+		}
+		const home = new URL(brand.href);
+		if (home.pathname.replace(/\/$/, "") !== now.pathname.replace(/\/$/, "")) {
+			return;
+		}
+		this.mark(brand, now.searchParams.size === 0);
+	}
+
+	mark(node: Element, on: boolean): void {
+		if (on) {
+			node.setAttribute("aria-current", "page");
+		} else {
+			node.removeAttribute("aria-current");
 		}
 	}
 
@@ -191,6 +194,11 @@ class Feed {
 			return list.sort((a, b) => b.published.localeCompare(a.published));
 		}
 		if (query.order === "published") {
+			return items
+				.slice()
+				.sort((a, b) => b.published.localeCompare(a.published));
+		}
+		if (items.every((item) => !item.frames)) {
 			return items
 				.slice()
 				.sort((a, b) => b.published.localeCompare(a.published));
@@ -267,7 +275,6 @@ class Feed {
 							description: item.description,
 							tags: item.tags,
 							frames: item.frames,
-							interval: item.interval,
 						},
 					}),
 				);

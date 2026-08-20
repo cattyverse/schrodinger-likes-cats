@@ -3,25 +3,25 @@ import { onMount } from "svelte";
 import { imageUrl } from "../scripts/url";
 
 const PUSH_MS = 300;
+const INTERVAL = 2000;
 const injected = new Set<string>();
 
 type Props = {
 	slug: string;
 	frames: number;
-	interval: number;
 	title: string;
 };
 
-let { slug, frames, interval, title }: Props = $props();
+let { slug, frames, title }: Props = $props();
 
 function pct(cycle: number, ms: number): string {
 	return `${((ms / cycle) * 100).toFixed(4)}%`;
 }
 
 function keyframes(i: number, cycle: number): string {
-	const visibleStart = i * (interval + PUSH_MS);
+	const visibleStart = i * (INTERVAL + PUSH_MS);
 	const enterStart = visibleStart - PUSH_MS;
-	const exitStart = visibleStart + interval;
+	const exitStart = visibleStart + INTERVAL;
 	const name = `frames-${slug}-${i + 1}`;
 	const p = (ms: number) => pct(cycle, ms);
 
@@ -52,7 +52,7 @@ function ensureCss(): void {
 	}
 	injected.add(slug);
 	const count = frames + 1;
-	const cycle = count * (interval + PUSH_MS);
+	const cycle = count * (INTERVAL + PUSH_MS);
 	const css = Array.from({ length: count }, (_, i) => {
 		const name = `frames-${slug}-${i + 1}`;
 		return `${keyframes(i, cycle)}

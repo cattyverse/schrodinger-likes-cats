@@ -1,0 +1,76 @@
+---
+import type { AstroComponentFactory } from "astro/runtime/server/index.js";
+import SiteFooter from "../components/siteFooter.astro";
+import SiteHeader from "../components/siteHeader.astro";
+import { labCatalog, slugOf } from "../scripts/catalog";
+import { imageUrl, styleUrl } from "../scripts/url";
+
+const bodies = import.meta.glob<{ default: AstroComponentFactory }>(
+	"../lab/*/body.astro",
+	{ eager: true },
+);
+const bySlug = new Map(
+	Object.entries(bodies).map(([path, page]) => [
+		slugOf(path, "lab"),
+		page.default,
+	]),
+);
+const catalog = labCatalog();
+const inners = catalog.flatMap((item) => {
+	const Body = bySlug.get(item.slug);
+	return Body ? [{ slug: item.slug, Body }] : [];
+});
+---
+
+<html lang="ja">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>実験場</title>
+		<link rel="icon" href={imageUrl("site", "logo.svg")} type="image/svg+xml">
+		<link rel="stylesheet" href={styleUrl("global.css")}>
+		<link rel="stylesheet" href={styleUrl("card.css")}>
+	</head>
+	<body>
+		<SiteHeader />
+		<div data-shelf></div>
+		<main class="stack" data-stack></main>
+		<div class="feed-status" data-status hidden>
+			<div class="feed-spinner" aria-hidden="true"></div>
+		</div>
+		<div class="feed-sentinel" data-sentinel></div>
+		<SiteFooter deferred />
+		{inners.map(({ slug, Body }) => (
+			<template data-card-body={slug}>
+				<Body />
+			</template>
+		))}
+		<script
+			is:inline
+			id="catalog"
+			type="application/json"
+			set:html={JSON.stringify(catalog)}
+		></script>
+		<script>
+		import { startFeed } from "../scripts/feed";
+
+		const stack = document.querySelector<HTMLElement>("[data-stack]");
+		const status = document.querySelector<HTMLElement>("[data-status]");
+		const sentinel = document.querySelector<HTMLElement>("[data-sentinel]");
+		const footer = document.querySelector<HTMLElement>("[data-footer]");
+		const shelf = document.querySelector<HTMLElement>("[data-shelf]");
+		const catalogText = document.getElementById("catalog")?.textContent;
+
+		if (stack && status && sentinel && footer && shelf && catalogText) {
+			startFeed({
+				items: JSON.parse(catalogText),
+				stack,
+				status,
+				sentinel,
+				footer,
+				shelf,
+			});
+		}
+		</script>
+	</body>
+</html>
